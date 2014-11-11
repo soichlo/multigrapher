@@ -10,7 +10,7 @@ library(scales)
 library(plot3D)
 library(manipulate)
 library(cubature)
-library(mosiac)
+
 if (!("shiny" %in% names(installed.packages()[,"Package"]))) {install.packages("shiny")}
 suppressMessages(library(shiny, quietly = TRUE))
 
