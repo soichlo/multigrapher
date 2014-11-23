@@ -31,20 +31,20 @@ shinyServer(function(input, output, session) {
   })
   #Enter integrand to be evaluated
   output$integrand <- renderUI({
-    textInput("integrand", withMathJax('Enter the integrand: e.g. paraboloid: x[1]^2+x[2]^2'), value="x[1]^2+x[2]^2")
+    textInput("integrand", withMathJax('Enter the integrand: e.g. paraboloid: x1^2+x2^2'), value="x1^2+x2^2")
   })
   #Enter limits for integration
   output$lowerLim1 <- renderUI({
-    textInput("lowerLimit1", withMathJax('Enter the lower limit of integration on x[1]:'), value="0")
+    textInput("lowerLimit1", withMathJax('Enter the lower limit of integration on x1:'), value="0")
   })
   output$upperLim1 <- renderUI({
-    textInput("upperLimit1", withMathJax('Enter the upper limit of integration on x[1]:'), value="1")
+    textInput("upperLimit1", withMathJax('Enter the upper limit of integration on x1:'), value="1")
   })
   output$lowerLim2 <- renderUI({
-    textInput("lowerLimit2", withMathJax('Enter the lower limit of integration on x[2]:'), value="0")
+    textInput("lowerLimit2", withMathJax('Enter the lower limit of integration on x2:'), value="0")
   })
   output$upperLim2 <- renderUI({
-    textInput("upperLimit2", withMathJax('Enter the upper limit of integration on x[2]:'), value="1")
+    textInput("upperLimit2", withMathJax('Enter the upper limit of integration on x2:'), value="1")
   })
   
   #Choose an object/enter your own after selecting Pre Set or Enter Own.
@@ -66,8 +66,14 @@ shinyServer(function(input, output, session) {
   })
 
   output$intCalc <- renderUI({
+    #Allows for integrand to use x1 and x2 instead of x[1] and x[2]
+    integrate <- function(x) {
+      x1 = x[1]
+      x2 = x[2]
+      eval(parse(text=input$integrand))
+    }
     #Compute integral of the inputted integrand over the inputted region
-    adaptIntegrate(function(x) eval(parse(text = input$integrand)), lowerLimit = c(input$lowerLimit1,input$lowerLimit2), upperLimit = c(input$upperLimit1, input$upperLimit2)) #eval(parse....) solved the problem of entering the inputted integrand into adaptIntegrate
+    adaptIntegrate(integrate, lowerLimit = c(input$lowerLimit1,input$lowerLimit2), upperLimit = c(input$upperLimit1, input$upperLimit2)) #eval(parse....) solved the problem of entering the inputted integrand into adaptIntegrate
   })
   
   #Close
