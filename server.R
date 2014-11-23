@@ -30,7 +30,7 @@ shinyServer(function(input, output, session) {
                  step=1, min=0, max=360)
   })
   output$integrand <- renderUI({
-    textInput("integrand", withMathJax('Enter the integrand: e.g. paraboloid: x[1]^2+x[2]^2'), "function(x) x[1]^2+x[2]^2")
+    textInput("integrand", withMathJax('Enter the integrand: e.g. paraboloid: x[1]^2+x[2]^2'), value="x[1]^2+x[2]^2")
   })
   output$lowerLim1 <- renderUI({
     textInput("lowerLimit1", withMathJax('Enter the lower limit of integration on x[1]:'), value="0")
@@ -64,8 +64,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$intCalc <- renderUI({
-    f <- as.formula(paste('mpg ~', input$integrand))
-    adaptIntegrate(f, lowerLimit = c(input$lowerLimit1,input$lowerLimit2), upperLimit = c(input$upperLimit1, input$upperLimit2))
+    adaptIntegrate(function(x) eval(parse(text = input$integrand)), lowerLimit = c(input$lowerLimit1,input$lowerLimit2), upperLimit = c(input$upperLimit1, input$upperLimit2)) #eval(parse....) solved the problem of entering the inputted integrand into adaptIntegrate
   })
   
   #Close
